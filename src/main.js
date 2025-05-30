@@ -313,11 +313,14 @@ startButton.addEventListener('click', async () => {
         }
     }
 
+    let usingDeviceOrientation = false; // <-- add this flag
+
     window.addEventListener('deviceorientation', (event) => {
         alpha = event.alpha ?? 0;
         beta = event.beta ?? 0;
         gamma = event.gamma ?? 0;
 
+        usingDeviceOrientation = true; // <== enable flag
         updateCameraOrientation(alpha, beta, gamma);
     }, true);
 });
@@ -473,6 +476,12 @@ function onClick(event) {
 // Animate loop
 function animate() {
 
+    // only update orbit controls if not using device orientation
+    if (!usingDeviceOrientation) {
+        controls.update();
+    } else {
+        camera.quaternion.slerp(targetQuaternion, 0.1);
+    }
 
 
     // Optionally update controls target or disable orbit control rotation here
