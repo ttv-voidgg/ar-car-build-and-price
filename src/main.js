@@ -28,12 +28,12 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
 const camera = new THREE.PerspectiveCamera(
-    75,
+    50,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
 );
-camera.position.set(3, 3, 3);
+camera.position.set(10, 7, 7);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -267,6 +267,7 @@ loader.load('/models/model.glb', (gltf) => {
     const box = new THREE.Box3().setFromObject(gltf.scene);
     const center = box.getCenter(new THREE.Vector3());
     controls.target.copy(center);
+    camera.lookAt(center);
     controls.update();
 }, undefined, (error) => {
     console.error('Error loading model:', error);
