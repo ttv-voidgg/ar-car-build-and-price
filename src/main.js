@@ -57,9 +57,9 @@ if ('xr' in navigator) {
             // Create a custom button
             const button = document.createElement('button');
             button.textContent = 'Enter AR';
-            button.style.position = 'absolute';
+            button.style.position = 'relative';
             button.style.bottom = '20px';
-            button.style.left = '50%';
+            button.style.left = '0';
             button.style.transform = 'translateX(-50%)';
             button.style.padding = '12px 24px';
             button.style.fontSize = '16px';
