@@ -299,6 +299,8 @@ function updateCameraOrientation(alpha, beta, gamma) {
     camera.updateMatrixWorld();
 }
 
+let usingDeviceOrientation = false; // <-- add this flag
+
 startButton.addEventListener('click', async () => {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         try {
@@ -313,7 +315,7 @@ startButton.addEventListener('click', async () => {
         }
     }
 
-    let usingDeviceOrientation = false; // <-- add this flag
+
 
     window.addEventListener('deviceorientation', (event) => {
         alpha = event.alpha ?? 0;
