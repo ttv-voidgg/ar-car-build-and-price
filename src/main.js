@@ -33,7 +33,7 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 );
-camera.position.set(10, 7, 7);
+camera.position.set(10, 5, 0);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -289,8 +289,8 @@ let alpha = 330, beta = 90, gamma = 50;
 
 function updateCameraOrientation(alpha, beta, gamma) {
     const euler = new THREE.Euler(
-        THREE.MathUtils.degToRad(beta),
-        THREE.MathUtils.degToRad(-alpha),
+        THREE.MathUtils.degToRad(-beta),
+        THREE.MathUtils.degToRad(alpha),
         THREE.MathUtils.degToRad(-gamma),
         'XZY' // important order for mobile
     );
