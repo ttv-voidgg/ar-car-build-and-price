@@ -57,14 +57,14 @@ const envTexture = new THREE.TextureLoader().load('/textures/env.jpg', (texture)
 });
 
 // Controls
-// const controls = new OrbitControls(camera, renderer.domElement);
-// controls.enableDamping = true;
-// controls.dampingFactor = 0.05;
-// controls.screenSpacePanning = false;
-// controls.minDistance = 1;
-// controls.maxDistance = 20;
-// controls.maxPolarAngle = Math.PI / 2;
-// controls.update();
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.screenSpacePanning = false;
+controls.minDistance = 1;
+controls.maxDistance = 20;
+controls.maxPolarAngle = Math.PI / 2;
+controls.update();
 
 // Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -266,8 +266,8 @@ loader.load('/models/model.glb', (gltf) => {
     // Adjust controls target to model center after loading
     const box = new THREE.Box3().setFromObject(gltf.scene);
     const center = box.getCenter(new THREE.Vector3());
-    //controls.target.copy(center);
-    //controls.update();
+    controls.target.copy(center);
+    controls.update();
 }, undefined, (error) => {
     console.error('Error loading model:', error);
 });
@@ -295,6 +295,7 @@ function updateCameraOrientation(alpha, beta, gamma) {
     );
 
     camera.quaternion.setFromEuler(euler);
+    camera.updateMatrixWorld();
 }
 
 startButton.addEventListener('click', async () => {
@@ -312,9 +313,9 @@ startButton.addEventListener('click', async () => {
     }
 
     window.addEventListener('deviceorientation', (event) => {
-        alpha = event.alpha;
-        beta = event.beta;
-        gamma = event.gamma;
+        alpha = event.alpha ?? 0;
+        beta = event.beta ?? 0;
+        gamma = event.gamma ?? 0;
 
         updateCameraOrientation(alpha, beta, gamma);
     }, true);
