@@ -284,8 +284,6 @@ window.addEventListener('resize', () => {
 const startButton = document.getElementById('startButton');
 
 //AR Orientation
-let alpha = 0, beta = 0, gamma = 0;
-
 startButton.addEventListener('click', async () => {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         try {
@@ -305,6 +303,8 @@ startButton.addEventListener('click', async () => {
         alpha = event.alpha || 0; // rotation around z-axis
         beta = event.beta || 0;   // front to back
         gamma = event.gamma || 0; // left to right
+
+        alert(gamma);
     }, true);
 });
 
@@ -455,10 +455,14 @@ function onClick(event) {
     }
 }
 
+let alpha = 0, beta = 0, gamma = 0;
+
 function onDeviceOrientation(event) {
     const alpha = event.alpha || 0; // rotation around z-axis
     const beta = event.beta || 0;   // front-back
     const gamma = event.gamma || 0; // left-right
+
+    alert(event.alpha);
 
     // Convert degrees to radians
     const x = THREE.MathUtils.degToRad(beta);
