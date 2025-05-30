@@ -296,7 +296,7 @@ function updateCameraOrientation(alpha, beta, gamma) {
         0,
         'XZY' // important order for mobile
     );
-
+    //EH
     camera.quaternion.setFromEuler(euler);
     camera.updateMatrixWorld();
 }
