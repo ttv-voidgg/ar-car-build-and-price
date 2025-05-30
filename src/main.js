@@ -291,7 +291,7 @@ function updateCameraOrientation(alpha, beta, gamma) {
     const euler = new THREE.Euler(
         THREE.MathUtils.degToRad(-beta),
         THREE.MathUtils.degToRad(alpha),
-        THREE.MathUtils.degToRad(-gamma),
+        THREE.MathUtils.degToRad(gamma),
         'XZY' // important order for mobile
     );
 
