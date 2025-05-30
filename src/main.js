@@ -296,30 +296,11 @@ startButton.addEventListener('click', async () => {
             return;
         }
     }
+
+    // ✅ Add the listener to update camera on orientation
+    window.addEventListener('deviceorientation', handleOrientation, true);
+
 });
-
-//AR Orientation
-let alpha = 0, beta = 0, gamma = 0;
-
-function onDeviceOrientation(event) {
-    const { alpha, beta, gamma } = event;
-
-    if (alpha === null || beta === null || gamma === null) return;
-
-    const euler = new THREE.Euler(
-        THREE.MathUtils.degToRad(beta),
-        THREE.MathUtils.degToRad(alpha),
-        THREE.MathUtils.degToRad(-gamma),
-        'YXZ'
-    );
-
-    alert(euler);
-
-    camera.quaternion.setFromEuler(euler);
-}
-
-window.addEventListener('deviceorientation', onDeviceOrientation, true);
-
 
 // Listen for click events on the renderer's canvas
 renderer.domElement.addEventListener('click', onClick, false);
@@ -468,22 +449,29 @@ function onClick(event) {
     }
 }
 
+//AR Orientation
+let alpha = 0, beta = 0, gamma = 0;
+
+function onDeviceOrientation(event) {
+    const alpha = event.alpha || 0; // rotation around z-axis
+    const beta = event.beta || 0;   // front-back
+    const gamma = event.gamma || 0; // left-right
+
+    // Convert degrees to radians
+    const x = THREE.MathUtils.degToRad(beta);
+    const y = THREE.MathUtils.degToRad(gamma);
+    const z = THREE.MathUtils.degToRad(alpha);
+
+    // Optional: use quaternions for smoother rotation
+    const euler = new THREE.Euler(x, y, z, 'YXZ');
+    camera.quaternion.setFromEuler(euler);
+}
+
+window.addEventListener('deviceorientation', onDeviceOrientation, true);
+
 // Animate loop
 function animate() {
     //requestAnimationFrame(animate);
-
-
-    // Convert Euler angles from deviceorientation to quaternion
-    // Deviceorientation default coordinate system:
-    // Z (alpha), X (beta), Y (gamma) rotations in Z-X'-Y'' order
-
-    // Build Euler in 'ZXY' order matching deviceorientation spec
-    const euler = new THREE.Euler(beta, gamma, alpha, 'ZXY');
-    const quaternion = new THREE.Quaternion().setFromEuler(euler);
-
-    // Apply this rotation quaternion to camera:
-    camera.quaternion.copy(quaternion);
-
 
     // Optionally update controls target or disable orbit control rotation here
     controls.update();
