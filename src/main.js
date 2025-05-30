@@ -481,8 +481,6 @@ function animate() {
     // only update orbit controls if not using device orientation
     if (!usingDeviceOrientation) {
         controls.update();
-    } else {
-        camera.quaternion.slerp(targetQuaternion, 0.1);
     }
 
 
