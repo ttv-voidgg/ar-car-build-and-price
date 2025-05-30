@@ -292,12 +292,20 @@ function updateCameraOrientation(alpha, beta, gamma) {
         THREE.MathUtils.degToRad(-beta),
         THREE.MathUtils.degToRad(alpha),
         THREE.MathUtils.degToRad(gamma),
-        'XYZ' // important order for mobile
+        'XZY' // important order for mobile
     );
 
     camera.quaternion.setFromEuler(euler);
     camera.updateMatrixWorld();
 }
+
+const euler2 = new THREE.Euler().setFromQuaternion(camera.quaternion, 'XYZ');
+
+console.log('Camera Euler angles (degrees):', {
+    x: THREE.MathUtils.radToDeg(euler2.x).toFixed(2),
+    y: THREE.MathUtils.radToDeg(euler2.y).toFixed(2),
+    z: THREE.MathUtils.radToDeg(euler2.z).toFixed(2),
+});
 
 let usingDeviceOrientation = false; // <-- add this flag
 const debugDiv = document.getElementById('orientation-debug');
@@ -326,8 +334,8 @@ startButton.addEventListener('click', async () => {
 
         debugDiv.innerHTML = `
             <strong>Device Orientation</strong><br/>
-            Alpha (Z): ${alpha?.toFixed(2)}°<br/>
-            Beta (X): ${beta?.toFixed(2)}°<br/>
+            Alpha (X): ${alpha?.toFixed(2)}°<br/>
+            Beta (Z): ${beta?.toFixed(2)}°<br/>
             Gamma (Y): ${gamma?.toFixed(2)}°
           `;
 
