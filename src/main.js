@@ -7,7 +7,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-
+import { DeviceOrientationControls } from './utils/DeviceOrientationControls.js';
 
 // Declare
 const canvas = document.getElementById('experience-canvas');
@@ -33,7 +33,9 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 );
-camera.position.set(10, 5, 0);
+camera.position.set(0, 5, 20);
+
+const deviceControls = new DeviceOrientationControls(camera);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -285,15 +287,21 @@ window.addEventListener('resize', () => {
 const startButton = document.getElementById('startButton');
 
 //AR Orientation
-let alpha = -90.00, beta = 90.00, gamma = 63.43;
+let alpha = 0, beta =  0, gamma = 0;
+
+function normalizeAngleDeg(angle) {
+    let a = angle % 360; // keep within 0–359
+    if (a > 180) a -= 360;
+    return a;
+}
+
 
 function updateCameraOrientation(alpha, beta, gamma) {
+
     const euler = new THREE.Euler(
+        THREE.MathUtils.degToRad(beta-90),
         THREE.MathUtils.degToRad(alpha),
-        //THREE.MathUtils.degToRad(-beta),
-        //THREE.MathUtils.degToRad(gamma),
-        0,
-        0,
+        THREE.MathUtils.degToRad(-gamma),
         'XZY' // important order for mobile
     );
     //EH
@@ -312,7 +320,9 @@ console.log('Camera Euler angles (degrees):', {
 let usingDeviceOrientation = false; // <-- add this flag
 const debugDiv = document.getElementById('orientation-debug');
 
+
 startButton.addEventListener('click', async () => {
+    // Handle device orientation permission (iOS specific)
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         try {
             const response = await DeviceOrientationEvent.requestPermission();
@@ -327,32 +337,38 @@ startButton.addEventListener('click', async () => {
     }
 
 
-
+    // Start listening to device orientation
     window.addEventListener('deviceorientation', (event) => {
-        alpha = event.alpha ?? 0; //YAW (Compass)
-        beta = event.beta ?? 0; //Pitch (Back/Front)
-        gamma = event.gamma ?? 0; //Roll (Side)
+        const alpha = event.alpha ?? 0; // Yaw (Compass)
+        const beta = event.beta ?? 0;   // Pitch (Back/Front)
+        const gamma = event.gamma ?? 0; // Roll (Side)
 
-        // Convert degrees to radians
-        const pitch = THREE.MathUtils.degToRad(beta);
         const yaw = THREE.MathUtils.degToRad(alpha);
+        const pitch = THREE.MathUtils.degToRad(beta);
         const roll = THREE.MathUtils.degToRad(gamma);
 
-        // Optional: log to see what's changing
         console.log({ pitch, yaw, roll });
 
+        usingDeviceOrientation = true;
 
         debugDiv.innerHTML = `
+          <div>
             <strong>Device Orientation</strong><br/>
-            Alpha/Yaw (X): ${alpha?.toFixed(2)}°<br/>
-            Beta/Pitch (Z): ${beta?.toFixed(2)}°<br/>
-            Gamma/Roll (Y): ${gamma?.toFixed(2)}°
-          `;
+            Alpha/Yaw (X): ${alpha.toFixed(2)}°<br/>
+            Beta/Pitch (Z): ${beta.toFixed(2)}°<br/>
+            Gamma/Roll (Y): ${gamma.toFixed(2)}°
+          </div>
+        `;
 
-        usingDeviceOrientation = true; // <== enable flag
-        updateCameraOrientation(alpha, beta, gamma);
     }, true);
+
+
+
+
+
+
 });
+
 
 // Listen for click events on the renderer's canvas
 renderer.domElement.addEventListener('click', onClick, false);
@@ -501,14 +517,43 @@ function onClick(event) {
     }
 }
 
+function mapLatitudeToX(lat) {
+    // Example: scale latitude degrees to 3D units
+    return (lat - 0) * 100; // if Winnipeg ~ 49 degrees latitude, offset and scale
+}
+
+function mapLongitudeToZ(lon) {
+    return (lon + 0) * 100; // if Winnipeg ~ -97 degrees longitude, offset and scale
+}
+
 
 // Animate loop
 function animate() {
 
+    // Calculate the bounding box of all objects in the scene
+    const boundingBox = new THREE.Box3().setFromObject(scene);
+
+    const size = new THREE.Vector3();
+    boundingBox.getSize(size);
+
+    const sceneWidth = size.x; // along X
+    const sceneHeight = size.y; // along Y
+    const sceneDepth = size.z; // along Z
+
+    console.log(`Scene size: ${sceneWidth.toFixed(2)} × ${sceneHeight.toFixed(2)} × ${sceneDepth.toFixed(2)} units`);
+
+
+    //--------------
+
     // only update orbit controls if not using device orientation
     if (!usingDeviceOrientation) {
         controls.update();
+    } else {
+
+        deviceControls.update();
     }
+
+
 
 
     // Optionally update controls target or disable orbit control rotation here
