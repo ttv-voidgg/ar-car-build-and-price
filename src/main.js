@@ -283,7 +283,6 @@ window.addEventListener('resize', () => {
 
 const startButton = document.getElementById('startButton');
 startButton.addEventListener('click', async () => {
-    // iOS requires permission
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         try {
             const response = await DeviceOrientationEvent.requestPermission();
@@ -298,8 +297,7 @@ startButton.addEventListener('click', async () => {
     }
 
     // ✅ Add the listener to update camera on orientation
-    window.addEventListener('deviceorientation', handleOrientation, true);
-
+    window.addEventListener('deviceorientation', onDeviceOrientation, true);
 });
 
 // Listen for click events on the renderer's canvas
