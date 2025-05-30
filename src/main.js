@@ -8,8 +8,6 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
-import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
-import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
 
 // Declare
 const canvas = document.getElementById('experience-canvas');
@@ -23,6 +21,8 @@ const renderTarget = new THREE.WebGLRenderTarget(sizes.width, sizes.height, {
     stencilBuffer: false,
     samples: 10000,
 });
+
+
 // Scene and camera
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
@@ -41,22 +41,12 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 //renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.xr.enabled = true;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // softer shadows
 document.body.appendChild(renderer.domElement);
 
 // After renderer initialization:
-document.body.appendChild(VRButton.createButton(renderer));
-document.body.appendChild(ARButton.createButton(renderer));
 
-renderer.xr.addEventListener('sessionstart', () => {
-    controls.enabled = false; // disable OrbitControls in XR
-});
-
-renderer.xr.addEventListener('sessionend', () => {
-    controls.enabled = true; // re-enable OrbitControls on exit
-});
 
 // PMREM environment
 const pmremGenerator = new THREE.PMREMGenerator(renderer);
@@ -298,9 +288,11 @@ function onDeviceOrientation(event) {
     alpha = event.alpha ? THREE.MathUtils.degToRad(event.alpha) : 0;  // compass
     beta = event.beta ? THREE.MathUtils.degToRad(event.beta) : 0;     // front-back tilt
     gamma = event.gamma ? THREE.MathUtils.degToRad(event.gamma) : 0;  // left-right tilt
+    alert(1);
 }
 
 window.addEventListener('deviceorientation', onDeviceOrientation, true);
+
 
 // Listen for click events on the renderer's canvas
 renderer.domElement.addEventListener('click', onClick, false);
@@ -489,8 +481,8 @@ function animate() {
         driverSpotLight.target.updateMatrixWorld();
 
         // Create helpers
-         //const driverSpotLightHelper = new THREE.SpotLightHelper(driverSpotLight);
-         //scene.add(driverSpotLightHelper);
+        //const driverSpotLightHelper = new THREE.SpotLightHelper(driverSpotLight);
+        //scene.add(driverSpotLightHelper);
     }
 
     if(passengerSpotLight && passengerHeadlight) {
@@ -505,8 +497,8 @@ function animate() {
         passengerSpotLight.target.updateMatrixWorld();
 
         // Create helpers
-         //const driverSpotLightHelper = new THREE.SpotLightHelper(passengerSpotLight);
-         //scene.add(driverSpotLightHelper);
+        //const driverSpotLightHelper = new THREE.SpotLightHelper(passengerSpotLight);
+        //scene.add(driverSpotLightHelper);
     }
 
     // Render with bloom
