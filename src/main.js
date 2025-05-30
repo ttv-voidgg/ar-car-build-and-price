@@ -476,7 +476,7 @@ window.addEventListener('deviceorientation', onDeviceOrientation, true);
 
 // Animate loop
 function animate() {
-    //requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
     // OPTIONAL: Convert orientation to camera rotation
     const euler = new THREE.Euler(
@@ -491,8 +491,6 @@ function animate() {
 
     // Optionally update controls target or disable orbit control rotation here
     controls.update();
-
-    alert(x)
 
 
     // Update spotlights to follow headlights and point forward
@@ -543,7 +541,7 @@ function animate() {
     });
 
 
-    composer.render();
+    composer.render(scene, camera);
 }
 
 renderer.setAnimationLoop(animate);
