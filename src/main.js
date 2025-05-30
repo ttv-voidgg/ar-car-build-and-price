@@ -292,7 +292,7 @@ function updateCameraOrientation(alpha, beta, gamma) {
         THREE.MathUtils.degToRad(beta),
         THREE.MathUtils.degToRad(alpha),
         THREE.MathUtils.degToRad(-gamma),
-        'YXZ' // important order for mobile
+        'ZXY' // important order for mobile
     );
 
     camera.quaternion.setFromEuler(euler);
