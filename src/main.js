@@ -462,8 +462,6 @@ function onDeviceOrientation(event) {
     const beta = event.beta || 0;   // front-back
     const gamma = event.gamma || 0; // left-right
 
-    alert(event.alpha);
-
     // Convert degrees to radians
     x = THREE.MathUtils.degToRad(beta);
     y = THREE.MathUtils.degToRad(gamma);
