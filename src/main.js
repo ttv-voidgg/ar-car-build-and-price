@@ -327,9 +327,9 @@ startButton.addEventListener('click', async () => {
 
 
     window.addEventListener('deviceorientation', (event) => {
-        const alpha = event.alpha ?? 0; // Yaw (compass)
-        const beta = event.beta ?? 0;   // Pitch (tilt front/back)
-        const gamma = event.gamma ?? 0; // Roll (tilt side to side)
+        alpha = event.alpha ?? 0; //YAW (Compass)
+        beta = event.beta ?? 0; //Pitch (Back/Front)
+        gamma = event.gamma ?? 0; //Roll (Side)
 
         // Convert degrees to radians
         const pitch = THREE.MathUtils.degToRad(beta);
@@ -339,9 +339,17 @@ startButton.addEventListener('click', async () => {
         // Optional: log to see what's changing
         console.log({ pitch, yaw, roll });
 
-        // Example: Apply only pitch (elevation)
-        camera.rotation.x = pitch; // tilt up/down
-    });
+
+        debugDiv.innerHTML = `
+            <strong>Device Orientation</strong><br/>
+            Alpha/Yaw (X): ${alpha?.toFixed(2)}°<br/>
+            Beta/Pitch (Z): ${beta?.toFixed(2)}°<br/>
+            Gamma/Roll (Y): ${gamma?.toFixed(2)}°
+          `;
+
+        usingDeviceOrientation = true; // <== enable flag
+        updateCameraOrientation(alpha, beta, gamma);
+    }, true);
 });
 
 // Listen for click events on the renderer's canvas
