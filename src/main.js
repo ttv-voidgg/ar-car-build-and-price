@@ -282,6 +282,10 @@ window.addEventListener('resize', () => {
 });
 
 const startButton = document.getElementById('startButton');
+
+//AR Orientation
+let alpha = 0, beta = 0, gamma = 0;
+
 startButton.addEventListener('click', async () => {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         try {
@@ -297,7 +301,11 @@ startButton.addEventListener('click', async () => {
     }
 
     // ✅ Add the listener to update camera on orientation
-    window.addEventListener('deviceorientation', onDeviceOrientation, true);
+    window.addEventListener('deviceorientation', (event) => {
+        alpha = event.alpha || 0; // rotation around z-axis
+        beta = event.beta || 0;   // front to back
+        gamma = event.gamma || 0; // left to right
+    }, true);
 });
 
 // Listen for click events on the renderer's canvas
@@ -447,9 +455,6 @@ function onClick(event) {
     }
 }
 
-//AR Orientation
-let alpha = 0, beta = 0, gamma = 0;
-
 function onDeviceOrientation(event) {
     const alpha = event.alpha || 0; // rotation around z-axis
     const beta = event.beta || 0;   // front-back
@@ -470,6 +475,16 @@ window.addEventListener('deviceorientation', onDeviceOrientation, true);
 // Animate loop
 function animate() {
     //requestAnimationFrame(animate);
+
+    // OPTIONAL: Convert orientation to camera rotation
+    const euler = new THREE.Euler(
+        THREE.MathUtils.degToRad(beta),
+        THREE.MathUtils.degToRad(alpha),
+        -THREE.MathUtils.degToRad(gamma),
+        'YXZ'
+    );
+
+    camera.quaternion.setFromEuler(euler);
 
     // Optionally update controls target or disable orbit control rotation here
     controls.update();
