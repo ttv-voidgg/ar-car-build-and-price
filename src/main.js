@@ -281,6 +281,26 @@ window.addEventListener('resize', () => {
     composer.setSize(window.innerWidth, window.innerHeight);
 });
 
+const startButton = document.getElementById('startButton');
+startButton.addEventListener('click', async () => {
+    // iOS requires permission
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        alert(0);
+        try {
+            const response = await DeviceOrientationEvent.requestPermission();
+            if (response !== 'granted') {
+                alert("Permission not granted for motion/orientation");
+                return;
+                alert(1);
+            }
+        } catch (error) {
+            alert("Device Orientation not supported or permission error.");
+            alert(2);
+            return;
+        }
+    }
+});
+
 //AR Orientation
 let alpha = 0, beta = 0, gamma = 0;
 
@@ -288,7 +308,6 @@ function onDeviceOrientation(event) {
     alpha = event.alpha ? THREE.MathUtils.degToRad(event.alpha) : 0;  // compass
     beta = event.beta ? THREE.MathUtils.degToRad(event.beta) : 0;     // front-back tilt
     gamma = event.gamma ? THREE.MathUtils.degToRad(event.gamma) : 0;  // left-right tilt
-    alert(1);
 }
 
 window.addEventListener('deviceorientation', onDeviceOrientation, true);

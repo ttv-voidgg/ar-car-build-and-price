@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/src/style.scss">
+    <noscript><link rel="stylesheet" href="/src/style.scss"></noscript>
+    <link rel="preload" href="/src/style.scss" as="style" onload="this.onload=null;this.rel='stylesheet'">
   </head>
 
   <body class="font-montserrat loading cursor">
     <!--START CANVAS-->
-
+    <div id="startButton" class="z-10 absolute top-1 left-1 text-black bg-white p-5" >START AR</div>
     <div id="experence" class="z-0">
       <canvas class="experience-canvas z-0" id="experience-canvas"></canvas>
-      </canvas>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>
