@@ -24,7 +24,7 @@ const renderTarget = new THREE.WebGLRenderTarget(sizes.width, sizes.height, {
     samples: 10000,
 });
 
-alert(1);
+
 // Scene and camera
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
