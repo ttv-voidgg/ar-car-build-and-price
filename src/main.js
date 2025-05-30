@@ -313,6 +313,8 @@ function onDeviceOrientation(event) {
         'YXZ'
     );
 
+    alert(euler);
+
     camera.quaternion.setFromEuler(euler);
 }
 
