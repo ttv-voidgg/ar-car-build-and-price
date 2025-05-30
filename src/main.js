@@ -51,53 +51,47 @@ document.body.appendChild(renderer.domElement);
 // After renderer initialization:
 document.body.appendChild(VRButton.createButton(renderer));
 // Ensure WebXR is available
-window.addEventListener('DOMContentLoaded', () => {
-    if ('xr' in navigator) {
-        navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
-            console.log('AR supported:', supported);
-            if (supported) {
-                // Create and style the button
-                const button = document.createElement('button');
-                button.textContent = 'Enter AR';
-                Object.assign(button.style, {
-                    position: 'relative',
-                    bottom: '20px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    padding: '12px 24px',
-                    fontSize: '16px',
-                    zIndex: '9999',
-                    background: '#fff',
-                    border: '1px solid #000',
-                    cursor: 'pointer'
-                });
-                document.body.appendChild(button);
+const startARButton = document.createElement('button');
+startARButton.textContent = 'Start AR';
+Object.assign(startARButton.style, {
+    position: 'absolute',
+    bottom: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    zIndex: '9999',
+    padding: '12px 24px',
+    fontSize: '16px',
+    backgroundColor: '#ffffff',
+    color: '#000000',
+    border: '2px solid #000000',
+    borderRadius: '8px',
+    cursor: 'pointer'
+});
 
-                // On click, start AR session
-                button.addEventListener('click', async () => {
-                    try {
-                        const session = await navigator.xr.requestSession('immersive-ar', {
-                            requiredFeatures: ['hit-test'],
-                            optionalFeatures: ['dom-overlay'],
-                            domOverlay: { root: document.body }
-                        });
+// Click event to request AR session
+startARButton.addEventListener('click', async () => {
+    if (navigator.xr) {
+        try {
+            const session = await navigator.xr.requestSession('immersive-ar', {
+                requiredFeatures: ['hit-test'],
+                optionalFeatures: ['dom-overlay'],
+                domOverlay: { root: document.body }
+            });
 
-                        renderer.xr.setSession(session);
-                        console.log('AR session started');
-                    } catch (err) {
-                        console.error('Failed to start AR session', err);
-                    }
-                });
-            } else {
-                console.warn('WebXR AR not supported on this device/browser.');
-            }
-        }).catch(err => {
-            console.error('Error checking AR support:', err);
-        });
+            renderer.xr.setSession(session);
+            console.log('AR session started');
+
+            // Optionally remove the button
+            startARButton.remove();
+        } catch (e) {
+            console.error('Failed to start AR session:', e);
+        }
     } else {
-        console.warn('WebXR not available in this browser');
+        alert('WebXR not supported');
     }
 });
+
+document.body.appendChild(startARButton);
 
 renderer.xr.addEventListener('sessionstart', () => {
     controls.enabled = false; // disable OrbitControls in XR
