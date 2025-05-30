@@ -285,7 +285,7 @@ window.addEventListener('resize', () => {
 const startButton = document.getElementById('startButton');
 
 //AR Orientation
-let alpha = 52.98, beta = -20.46, gamma = 78.19;
+let alpha = 330, beta = 90, gamma = 50;
 
 function updateCameraOrientation(alpha, beta, gamma) {
     const euler = new THREE.Euler(
