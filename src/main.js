@@ -101,6 +101,18 @@ renderer.xr.addEventListener('sessionend', () => {
     controls.enabled = true; // re-enable OrbitControls on exit
 });
 
+if (navigator.xr) {
+  navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
+    if (supported) {
+      // Proceed to set up AR session
+    } else {
+      alert('immersive-ar not supported');
+    }
+  });
+} else {
+  alert('WebXR not supported');
+}
+
 // PMREM environment
 const pmremGenerator = new THREE.PMREMGenerator(renderer);
 const envTexture = new THREE.TextureLoader().load('/textures/env.jpg', (texture) => {
