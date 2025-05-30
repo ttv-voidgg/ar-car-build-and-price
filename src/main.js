@@ -305,7 +305,7 @@ function onDeviceOrientation(event) {
     alpha = event.alpha ? THREE.MathUtils.degToRad(event.alpha) : 0;  // compass
     beta = event.beta ? THREE.MathUtils.degToRad(event.beta) : 0;     // front-back tilt
     gamma = event.gamma ? THREE.MathUtils.degToRad(event.gamma) : 0;  // left-right tilt
-    alert("test");
+    alert(alpha);
 }
 
 window.addEventListener('deviceorientation', onDeviceOrientation, true);
