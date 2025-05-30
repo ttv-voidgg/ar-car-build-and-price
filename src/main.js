@@ -302,10 +302,18 @@ startButton.addEventListener('click', async () => {
 let alpha = 0, beta = 0, gamma = 0;
 
 function onDeviceOrientation(event) {
-    alpha = event.alpha ? THREE.MathUtils.degToRad(event.alpha) : 0;  // compass
-    beta = event.beta ? THREE.MathUtils.degToRad(event.beta) : 0;     // front-back tilt
-    gamma = event.gamma ? THREE.MathUtils.degToRad(event.gamma) : 0;  // left-right tilt
-    alert(alpha);
+    const { alpha, beta, gamma } = event;
+
+    if (alpha === null || beta === null || gamma === null) return;
+
+    const euler = new THREE.Euler(
+        THREE.MathUtils.degToRad(beta),
+        THREE.MathUtils.degToRad(alpha),
+        THREE.MathUtils.degToRad(-gamma),
+        'YXZ'
+    );
+
+    camera.quaternion.setFromEuler(euler);
 }
 
 window.addEventListener('deviceorientation', onDeviceOrientation, true);
