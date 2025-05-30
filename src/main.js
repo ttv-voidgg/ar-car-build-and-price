@@ -488,8 +488,11 @@ function animate() {
 
     camera.quaternion.setFromEuler(euler);
 
+
     // Optionally update controls target or disable orbit control rotation here
     controls.update();
+
+    alert(x)
 
 
     // Update spotlights to follow headlights and point forward
