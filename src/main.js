@@ -284,6 +284,19 @@ window.addEventListener('resize', () => {
 const startButton = document.getElementById('startButton');
 
 //AR Orientation
+let alpha = 0, beta = 0, gamma = 0;
+
+function updateCameraOrientation(alpha, beta, gamma) {
+    const euler = new THREE.Euler(
+        THREE.MathUtils.degToRad(beta),
+        THREE.MathUtils.degToRad(alpha),
+        THREE.MathUtils.degToRad(-gamma),
+        'YXZ' // important order for mobile
+    );
+
+    camera.quaternion.setFromEuler(euler);
+}
+
 startButton.addEventListener('click', async () => {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         try {
@@ -298,13 +311,12 @@ startButton.addEventListener('click', async () => {
         }
     }
 
-    // ✅ Add the listener to update camera on orientation
     window.addEventListener('deviceorientation', (event) => {
-        alpha = event.alpha || 0; // rotation around z-axis
-        beta = event.beta || 0;   // front to back
-        gamma = event.gamma || 0; // left to right
+        alpha = event.alpha ?? 0;
+        beta = event.beta ?? 0;
+        gamma = event.gamma ?? 0;
 
-        alert(gamma);
+        updateCameraOrientation(alpha, beta, gamma);
     }, true);
 });
 
@@ -455,38 +467,10 @@ function onClick(event) {
     }
 }
 
-let x = 0, y = 0, z = 0;
-
-function onDeviceOrientation(event) {
-    const alpha = event.alpha || 0; // rotation around z-axis
-    const beta = event.beta || 0;   // front-back
-    const gamma = event.gamma || 0; // left-right
-
-    // Convert degrees to radians
-    x = THREE.MathUtils.degToRad(beta);
-    y = THREE.MathUtils.degToRad(gamma);
-    z = THREE.MathUtils.degToRad(alpha);
-
-    // Optional: use quaternions for smoother rotation
-    const euler = new THREE.Euler(x, y, z, 'YXZ');
-    camera.quaternion.setFromEuler(euler);
-}
-
-window.addEventListener('deviceorientation', onDeviceOrientation, true);
 
 // Animate loop
 function animate() {
-    requestAnimationFrame(animate);
 
-    // OPTIONAL: Convert orientation to camera rotation
-    const euler = new THREE.Euler(
-        THREE.MathUtils.degToRad(x),
-        THREE.MathUtils.degToRad(z),
-        -THREE.MathUtils.degToRad(y),
-        'YXZ'
-    );
-
-    camera.quaternion.setFromEuler(euler);
 
 
     // Optionally update controls target or disable orbit control rotation here
