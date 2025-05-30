@@ -48,7 +48,11 @@ document.body.appendChild(renderer.domElement);
 
 // After renderer initialization:
 document.body.appendChild(VRButton.createButton(renderer));
-document.body.appendChild(ARButton.createButton(renderer));
+document.body.appendChild(ARButton.createButton(renderer, {
+    requiredFeatures: ['hit-test'],
+    optionalFeatures: ['dom-overlay'],
+    domOverlay: { root: document.body }
+}));
 
 renderer.xr.addEventListener('sessionstart', () => {
     controls.enabled = false; // disable OrbitControls in XR
