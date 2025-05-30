@@ -312,9 +312,9 @@ startButton.addEventListener('click', async () => {
     }
 
     window.addEventListener('deviceorientation', (event) => {
-        alpha = event.alpha ?? 0;
-        beta = event.beta ?? 0;
-        gamma = event.gamma ?? 0;
+        alpha = event.alpha;
+        beta = event.beta;
+        gamma = event.gamma;
 
         updateCameraOrientation(alpha, beta, gamma);
     }, true);
