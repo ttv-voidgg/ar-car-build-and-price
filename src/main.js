@@ -50,15 +50,41 @@ document.body.appendChild(renderer.domElement);
 
 // After renderer initialization:
 document.body.appendChild(VRButton.createButton(renderer));
-const arButton = ARButton.createButton(renderer, {
-    requiredFeatures: ['hit-test'], // Hit test allows AR placement
-    optionalFeatures: ['dom-overlay'], // Optional: lets you show HTML UI
-    domOverlay: {
-        root: document.body // Overlay container for DOM UI
-    }
-});
+// Ensure WebXR is available
+if ('xr' in navigator) {
+    navigator.xr.isSessionSupported('immersive-ar').then((supported) => {
+        if (supported) {
+            // Create a custom button
+            const button = document.createElement('button');
+            button.textContent = 'Enter AR';
+            button.style.position = 'absolute';
+            button.style.bottom = '20px';
+            button.style.left = '50%';
+            button.style.transform = 'translateX(-50%)';
+            button.style.padding = '12px 24px';
+            button.style.fontSize = '16px';
+            button.style.zIndex = '999';
+            document.body.appendChild(button);
 
-document.body.appendChild(arButton);
+            // On button click, request AR session
+            button.addEventListener('click', async () => {
+                const session = await navigator.xr.requestSession('immersive-ar', {
+                    requiredFeatures: ['hit-test'],
+                    optionalFeatures: ['dom-overlay'],
+                    domOverlay: {
+                        root: document.body
+                    }
+                });
+
+                renderer.xr.setSession(session);
+            });
+        } else {
+            console.warn('WebXR AR not supported');
+        }
+    });
+} else {
+    console.warn('WebXR not available in this browser');
+}
 
 renderer.xr.addEventListener('sessionstart', () => {
     controls.enabled = false; // disable OrbitControls in XR
