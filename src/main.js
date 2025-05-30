@@ -455,7 +455,7 @@ function onClick(event) {
     }
 }
 
-let alpha = 0, beta = 0, gamma = 0;
+let x = 0, y = 0, z = 0;
 
 function onDeviceOrientation(event) {
     const alpha = event.alpha || 0; // rotation around z-axis
@@ -465,9 +465,9 @@ function onDeviceOrientation(event) {
     alert(event.alpha);
 
     // Convert degrees to radians
-    const x = THREE.MathUtils.degToRad(beta);
-    const y = THREE.MathUtils.degToRad(gamma);
-    const z = THREE.MathUtils.degToRad(alpha);
+    x = THREE.MathUtils.degToRad(beta);
+    y = THREE.MathUtils.degToRad(gamma);
+    z = THREE.MathUtils.degToRad(alpha);
 
     // Optional: use quaternions for smoother rotation
     const euler = new THREE.Euler(x, y, z, 'YXZ');
@@ -482,9 +482,9 @@ function animate() {
 
     // OPTIONAL: Convert orientation to camera rotation
     const euler = new THREE.Euler(
-        THREE.MathUtils.degToRad(beta),
-        THREE.MathUtils.degToRad(alpha),
-        -THREE.MathUtils.degToRad(gamma),
+        THREE.MathUtils.degToRad(x),
+        THREE.MathUtils.degToRad(z),
+        -THREE.MathUtils.degToRad(y),
         'YXZ'
     );
 
