@@ -292,7 +292,7 @@ function updateCameraOrientation(alpha, beta, gamma) {
         THREE.MathUtils.degToRad(beta),
         THREE.MathUtils.degToRad(alpha),
         THREE.MathUtils.degToRad(-gamma),
-        'ZXY' // important order for mobile
+        'YXZ' // important order for mobile
     );
 
     camera.quaternion.setFromEuler(euler);
@@ -300,6 +300,7 @@ function updateCameraOrientation(alpha, beta, gamma) {
 }
 
 let usingDeviceOrientation = false; // <-- add this flag
+const debugDiv = document.getElementById('orientation-debug');
 
 startButton.addEventListener('click', async () => {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
@@ -321,6 +322,14 @@ startButton.addEventListener('click', async () => {
         alpha = event.alpha ?? 0;
         beta = event.beta ?? 0;
         gamma = event.gamma ?? 0;
+
+
+        debugDiv.innerHTML = `
+            <strong>Device Orientation</strong><br/>
+            Alpha (Z): ${alpha?.toFixed(2)}°<br/>
+            Beta (X): ${beta?.toFixed(2)}°<br/>
+            Gamma (Y): ${gamma?.toFixed(2)}°
+          `;
 
         usingDeviceOrientation = true; // <== enable flag
         updateCameraOrientation(alpha, beta, gamma);
