@@ -289,10 +289,10 @@ let alpha = -90.00, beta = 90.00, gamma = 63.43;
 
 function updateCameraOrientation(alpha, beta, gamma) {
     const euler = new THREE.Euler(
-        THREE.MathUtils.degToRad(-beta),
         THREE.MathUtils.degToRad(alpha),
+        THREE.MathUtils.degToRad(-beta),
         THREE.MathUtils.degToRad(gamma),
-        'XZY' // important order for mobile
+        'XYZ' // important order for mobile
     );
 
     camera.quaternion.setFromEuler(euler);
