@@ -312,7 +312,7 @@ function updateCameraOrientation(alpha, beta, gamma) {
 const euler2 = new THREE.Euler().setFromQuaternion(camera.quaternion, 'XYZ');
 
 console.log('Camera Euler angles (degrees):', {
-    x: THREE.MathUtils.radToDeg(euler2.x).toFixed(2),
+    x: THREE.MathUtils.radToDeg(euler2.x).toFixed(git 2),
     y: THREE.MathUtils.radToDeg(euler2.y).toFixed(2),
     z: THREE.MathUtils.radToDeg(euler2.z).toFixed(2),
 });
