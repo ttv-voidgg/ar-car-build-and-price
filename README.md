@@ -2,6 +2,7 @@
 title: Car Build and Price (A prototype)
 description: An immersive 3D car build and price prototype that utilizes AR.
 date: 2025-05-20
+image: https://ar-car-build-and-price.vercel.app/AR.png
 site: https://ar-car-build-and-price-okke.vercel.app/
 category: Development
 author:
